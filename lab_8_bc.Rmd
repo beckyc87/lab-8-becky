@@ -1,0 +1,22 @@
+---
+title: "Lab 8 - Linear Regression"
+author: "Becky Clow"
+date: "11/25/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Linear Regression
+Today we will
+(a) Simplify data for easier data analysis
+(b) Create an exploratory scatterplot
+(c) Perform linear regression
+(d) Evaluate model diagnostics
+(e) Explore model fit and statistics
+(f) Prepare a final graph
+(g) Use the model output to make predictions
+(h) Find Pearson’s r (correlation)
+
