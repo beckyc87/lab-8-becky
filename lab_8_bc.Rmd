@@ -20,3 +20,61 @@ Today we will
 (g) Use the model output to make predictions
 (h) Find Pearson’s r (correlation)
 
+```{r}
+
+library(tidyverse)
+salmon <- read_csv("salmon_imports.csv")
+
+```
+
+##Exploratory scatterplot 
+To look at the relationship and ensure it is linear so we can do regression
+
+```{r}
+
+salmon_scatter <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+  geom_point()
+salmon_scatter
+
+#Overall, does it look like describing the relationship between year and fresh salmon imports using linear regression makes sense? Do you have any concerns about using linear regression to describe the relationship?
+
+#over all it is linear but there are a few jogs in the data that make linear regression maybe in appropriate.
+
+```
+
+
+##Linear Regression on the Salmon data 
+
+
+```{r}
+#Is there a linear relationship between volume of salmon imported and year
+
+salmon_model <- lm(salmon_fresh ~ year, data = salmon)
+salmon_model #shows intercept and slope
+
+#model equation
+# Imports(tons) = -14982940 + 7550(year)
+
+
+```
+What does the slope mean in the context of this model?
+The slope is the volume(tons) change of salmon imported to the US per year 
+
+What does the y-intercept mean in the context of this model? Why is that concerning? What does thismean about extrapolating this model for past values?
+The y-intercept is the volume of salmon at year zero but it is a negative number which is not possible in this context. We can't use this model to extrapolate to the past because of this negative value.
+
+
+##Model diagnostics
+```{r}
+par(mfrow = c(2.2))
+plot(salmon_model)  #shows diagnostic plots that describe more about the model
+
+
+#Do residuals appear normally distributed?
+#they are not completely normally distributed,they spread out towards the end
+
+#Any concerns about heteroscedasticity or outliers?
+#They are not spread evenly, the outliers increase as you continue down
+
+```
+
