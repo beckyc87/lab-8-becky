@@ -66,9 +66,8 @@ The y-intercept is the volume of salmon at year zero but it is a negative number
 
 ##Model diagnostics
 ```{r}
-par(mfrow = c(2.2))
-plot(salmon_model)  #shows diagnostic plots that describe more about the model
 
+plot(salmon_model) #shows diagnostic plots that describe more about the model
 
 #Do residuals appear normally distributed?
 #they are not completely normally distributed,they spread out towards the end
@@ -77,4 +76,73 @@ plot(salmon_model)  #shows diagnostic plots that describe more about the model
 #They are not spread evenly, the outliers increase as you continue down
 
 ```
+
+##Explore model fit and significance
+```{r}
+summary(salmon_model)
+
+#Does year significantly predict salmon imports?
+#yes the lower p-value of <2.2e-16 is sig
+
+#What does the R2 value actually mean in words?
+#0.9478 means that the salmon volume is 94% explained by the year
+
+#What proportion of the variance in salmon imports is NOT explained by year?
+#about 0.06
+
+```
+
+
+##Prepare final graph
+
+```{r}
+
+salmon_final_graph <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+  geom_point() +
+  geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") + #adds the linear model with a standard error
+  theme_bw() +
+  scale_x_continuous(expand = c(0,0), limits = c(1990, 2017)) +
+  labs(x = "Year", y = "U.S. Annual Fresh Salmon Imports\n(1,000 pounds)")
+
+salmon_final_graph
+
+```
+
+##Make Predictions using the model
+Let’s say we want to use our model to make predictions for U.S. fresh salmon imports in years 2022, 2024, 2026 and 2028.
+
+• Option 1 (not recommended): Plug each of those years into the model equation separately to calculate
+the expected U.S. imports.
+• Option 2 (recommended): Create a data frame containing the ‘new values’ that you want to make
+predictions for, feed that into the predict() function
+
+```{r}
+
+new_years <- data.frame(year = c(2022, 2024, 2026, 2028)) #creating a new data frame with just one colum with the given years
+
+#to find values for the years you want use predict()
+future_predict <- predict(salmon_model, newdata = new_years, interval = "confidence") #cofidence for the 95% CI, reports the upper and lower bounds
+future_predict
+
+#creating a dataframe with the predicted values and the new_years dataframe
+predictions <- data.frame(new_years, future_predict)
+predictions
+
+```
+
+##Find Pearson's r (correlation)
+Use the cor.test() function to find Pearson’s r for the linear relationship described between year and salmon
+imports.
+
+```{r}
+
+salmon_r <- cor.test(salmon$year, salmon$salmon_fresh)
+salmon_r
+
+#Would you describe this as a weak/strong negative/positive correlation?
+#strong positive correlation
+
+```
+
+##Write a concluding statement about the relationship
 
